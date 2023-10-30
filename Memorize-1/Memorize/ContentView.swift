@@ -1,55 +1,87 @@
-//
-//  ContentView.swift
-//  Memorize
-//
-//  Created by Class Demo on 5/10/2566 BE.
-//
-
 import SwiftUI
 
 struct ContentView: View {
-    let emojis_halloween = ["👻", "🎃", "🕷️", "👹", "💀", "🕸️", "🧙", "🙀", "👿", "😱", "☠️", "🍭"]
-    let emojis_car = ["🏎️","🚌","🚍","🚎","🚐","🚑","🚒","🚓","🚔","🚕","🚖","🚗"]
-    let emojis_car = ["🐵","🦊","🐶","🦁","🐯","🐱","🐎","🐷","🦓","🦙","🐀","🐻"]
+    let emojis_animal = ["🐵", "🦊", "🐶", "🦁", "🐯", "🐱", "🐎", "🐷"] + ["🐵", "🦊", "🐶", "🦁", "🐯", "🐱", "🐎", "🐷"]
+    let emojis_car = ["🏎️", "🚌", "🚍", "🚎", "🚐", "🚑", "🚒", "🚓"] + ["🏎️", "🚌", "🚍", "🚎", "🚐", "🚑", "🚒", "🚓"]
+    let emojis_kugkoo = ["👻", "🎃", "🕷️", "👹", "💀", "🕸️", "🧙", "🙀"] + ["👻", "🎃", "🕷️", "👹", "💀", "🕸️", "🧙", "🙀"]
+    let cardCount = 16
 
-    @State var cardCount = 4
+    @State var emojis_choosed: [String]
+
+    init() {
+        self.emojis_choosed = emojis_animal.shuffled()
+    }
 
     var body: some View {
         VStack {
-            HStack {
-                ForEach(0..<cardCount, id: \.self) { index in
-                    CardView(content: emojis[index])
-                }
+            Text("Memorize!")
+                .font(.largeTitle)
+                .bold()
+                .foregroundColor(.pink)
+                .padding(.bottom, 10)
+            
+            ScrollView {
+                cards
             }
-            .foregroundColor(.orange)
-
-            HStack {
-                Button(action: {
-                    if cardCount > 1 {
-                        cardCount -= 1
-                    }
-                }, label: {
-                    Image(systemName: "rectangle.stack.badge.minus.fill")
-                })
-                Spacer()
-                Button(action: {
-                    if cardCount < emojis.count {
-                        cardCount += 1
-                    }
-                }, label: {
-                    Image(systemName: "rectangle.stack.badge.plus.fill")
-                })
-            }
-            .imageScale(.large)
-            .font(.largeTitle)
+            cardCountAdjusters
         }
         .padding()
+        .onChange(of: emojis_choosed) { newValue in
+            if newValue.count >= cardCount {
+                emojis_choosed.shuffle()
+            }
+                    }
+    }
+    var cards: some View {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))]) {
+            ForEach(0..<cardCount, id: \.self) { index in
+                if index < emojis_choosed.count {}
+                CardView(content: emojis_choosed[index])
+                    .aspectRatio(2/3, contentMode: .fit)
+            }
+        }
+        .foregroundColor(.orange)
+    }
+
+    var cardCountAdjusters: some View {
+        HStack(spacing : 40){
+            Button(action: {
+                emojis_choosed = emojis_animal
+            }) {
+                VStack {
+                    Image(systemName: "flame")
+                        .frame(width: 10, height: 10)
+                    Text("Animal").font(.title)
+                }
+            }
+            Button(action: {
+                emojis_choosed = emojis_car
+            }) {
+                VStack {
+                    Image(systemName: "car")
+                        .frame(width: 10, height: 10)
+                    Text("Car").font(.title)
+                }
+            }
+            Button(action: {
+                emojis_choosed = emojis_kugkoo
+            }) {
+                VStack {
+                    Image(systemName: "face.smiling")
+                        .frame(width: 10, height: 10)
+                    Text("Kugkoo").font(.title)
+                }
+            }
+        }
+        .imageScale(.large)
+        .font(.largeTitle)
+        .frame(height: 100)
     }
 }
 
 struct CardView: View {
     let content: String
-    @State var isFaceUp = true
+    @State var isFaceUp = false
 
     var body: some View {
         ZStack {
@@ -67,10 +99,6 @@ struct CardView: View {
         }
     }
 }
-
-
-
-
 
 #Preview {
     ContentView()
