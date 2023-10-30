@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
-    let emojis = ["👻", "🎃", "🕷️", "👹", "💀", "🕸️", "🧙", "🙀", "👿", "😱", "☠️", "🍭"]
-    
+    let emojis_halloween = ["👻", "🎃", "🕷️", "👹", "💀", "🕸️", "🧙", "🙀", "👿", "😱", "☠️", "🍭"]
+    let emojis_car = ["🏎️","🚌","🚍","🚎","🚐","🚑","🚒","🚓","🚔","🚕","🚖","🚗"]
+    let emojis_car = ["🐵","🦊","🐶","🦁","🐯","🐱","🐎","🐷","🦓","🦙","🐀","🐻"]
+
     @State var cardCount = 4
-    
+
     var body: some View {
         VStack {
             HStack {
@@ -20,7 +22,7 @@ struct ContentView: View {
                 }
             }
             .foregroundColor(.orange)
-            
+
             HStack {
                 Button(action: {
                     if cardCount > 1 {
@@ -48,7 +50,7 @@ struct ContentView: View {
 struct CardView: View {
     let content: String
     @State var isFaceUp = true
-    
+
     var body: some View {
         ZStack {
             let base = RoundedRectangle(cornerRadius: 12)
